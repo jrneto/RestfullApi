@@ -95,5 +95,39 @@ namespace ExpenseTracker.API.Controllers
             }
         }
 
+        
+        public IHttpActionResult Put(int id, [FromBody] DTO.ExpenseGroup expenseGroup)
+        {
+            try
+            {
+                if (expenseGroup == null)
+                {
+                    return BadRequest();
+                }
+
+                var eg = _expenseGroupFactory.CreateExpenseGroup(expenseGroup);
+                var result = _repository.UpdateExpenseGroup(eg);
+
+                if (result.Status == RepositoryActionStatus.Updated)
+                {
+                    var updatedExpenseGroup = _expenseGroupFactory.CreateExpenseGroup
+                        (result.Entity);
+
+                    return Ok(updatedExpenseGroup);
+                }
+                else if (result.Status == RepositoryActionStatus.NotFound)
+                {
+                    return NotFound();
+                }
+
+                return BadRequest();
+
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }
+
     }
 }

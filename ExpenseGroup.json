@@ -11,3 +11,11 @@
 	"description": "ExpenseGroup description 2",
 	"expenseGroupStatusId": 1,
 }
+
+{
+    "id": 15,
+	"userId": "https://expensetrackeridsrv3/embedded_2",
+	"title": "New ExpenseGroup Update",
+	"description": "ExpenseGroup description Update",
+	"expenseGroupStatusId": 1,
+}
