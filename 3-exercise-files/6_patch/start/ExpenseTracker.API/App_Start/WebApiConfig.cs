@@ -23,6 +23,8 @@ namespace ExpenseTracker.API
 
             config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
 
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(
+                new MediaTypeHeaderValue("application/json-patch+json"));
 
             config.Formatters.JsonFormatter.SerializerSettings.Formatting
                 = Newtonsoft.Json.Formatting.Indented;

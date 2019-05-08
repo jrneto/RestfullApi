@@ -19,3 +19,9 @@
 	"description": "ExpenseGroup description Update",
 	"expenseGroupStatusId": 1,
 }
+
+//patch
+[
+	{"op": "replace", "path": "/title", "value":"New Title"},
+	{"op": "copy", "from": "/title", "path":"/description"}
+]
