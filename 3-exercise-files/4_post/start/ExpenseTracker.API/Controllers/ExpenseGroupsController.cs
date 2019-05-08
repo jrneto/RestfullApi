@@ -64,5 +64,33 @@ namespace ExpenseTracker.API.Controllers
             }
         }
 
+        [HttpPost]
+        public IHttpActionResult Post([FromBody] DTO.ExpenseGroup expenseGroup)
+        {
+            try
+            {
+                if (expenseGroup == null)
+                {
+                    return BadRequest();
+                }
+
+                var eg = _expenseGroupFactory.CreateExpenseGroup(expenseGroup);
+                var result = _repository.InsertExpenseGroup(eg);
+
+                if (result.Status == RepositoryActionStatus.Created)
+                {
+                    var newExpenseGroup = _expenseGroupFactory.CreateExpenseGroup(result.Entity);
+
+                    return Created(Request.RequestUri + "/" + newExpenseGroup.Id.ToString(), newExpenseGroup);
+                }
+
+                return BadRequest();
+            }   
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }
+
     }
 }

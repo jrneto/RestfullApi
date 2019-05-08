@@ -1,0 +1,13 @@
+{
+	"userId": "https://expensetrackeridsrv3/embedded_1",
+	"title": "New ExpenseGroup",
+	"description": "ExpenseGroup description",
+	"expenseGroupStatusId": 1,
+}
+
+{
+	"userId": "https://expensetrackeridsrv3/embedded_2",
+	"title": "New ExpenseGroup 2",
+	"description": "ExpenseGroup description 2",
+	"expenseGroupStatusId": 1,
+}
