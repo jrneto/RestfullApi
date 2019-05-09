@@ -33,11 +33,18 @@ namespace ExpenseTracker.API.Controllers
          
 
         [Route("expensegroups/{expenseGroupId}/expenses", Name = "ExpensesForGroup")]
-        public IHttpActionResult Get(int expenseGroupId, string sort = "date"
+        public IHttpActionResult Get(int expenseGroupId, string sort = "date", string fields = null
             , int page = 1, int pageSize = maxPageSize)
         {
             try
             {
+                List<string> lstOfFields = new List<string>();
+
+                if (fields != null)
+                {
+                    lstOfFields = fields.ToLower().Split(',').ToList();
+                }
+
                 var expenses = _repository.GetExpenses(expenseGroupId);
 
                 if (expenses == null)
@@ -60,9 +67,11 @@ namespace ExpenseTracker.API.Controllers
 
                 var prevLink = page > 1 ? urlHelper.Link("ExpensesForGroup",
                     new { page = page - 1, pageSize = pageSize, expenseGroupId = expenseGroupId,
+                        fields = fields,
                         sort = sort }) : "";
                 var nextLink = page < totalPages ? urlHelper.Link("ExpensesForGroup",
                     new { page = page + 1, pageSize = pageSize, expenseGroupId = expenseGroupId,
+                        fields = fields,
                         sort = sort }) : "";
 
 
@@ -85,7 +94,7 @@ namespace ExpenseTracker.API.Controllers
                     .Skip(pageSize * (page - 1))
                     .Take(pageSize)
                     .ToList()
-                    .Select(exp => _expenseFactory.CreateExpense(exp));
+                    .Select(exp => _expenseFactory.CreateDataShapedObject(exp, lstOfFields));
 
                 return Ok(expensesResult);
 

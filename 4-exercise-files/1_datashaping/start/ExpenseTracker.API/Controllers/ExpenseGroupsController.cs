@@ -36,10 +36,20 @@ namespace ExpenseTracker.API.Controllers
 
         [Route("api/expensegroups", Name = "ExpenseGroupsList")]
         public IHttpActionResult Get(string sort = "id", string status = null, string userId = null,
+             string fields = null,
              int page = 1, int pageSize = maxPageSize)
         {
             try
             {
+                bool includeExpenses = false;
+                List<string> lstOfFields = new List<string>();
+
+                if (fields != null)
+                {
+                    lstOfFields = fields.ToLower().Split(',').ToList();
+                    includeExpenses = lstOfFields.Any(f => f.Contains("expenses"));
+                }
+
                 int statusId = -1;
                 if (status != null)
                 {
@@ -54,12 +64,21 @@ namespace ExpenseTracker.API.Controllers
                         default:
                             break;
                     }
-                } 
+                }
+
+                IQueryable<Repository.Entities.ExpenseGroup> expenseGroups = null;
+                if (includeExpenses)
+                {
+                    expenseGroups = _repository.GetExpenseGroupsWithExpenses();
+                }
+                else
+                {
+                    expenseGroups = _repository.GetExpenseGroups();
+                }
 
 
                 // get expensegroups from repository
-                var expenseGroups = _repository.GetExpenseGroups()
-                    .ApplySort(sort)
+                expenseGroups = expenseGroups.ApplySort(sort)
                     .Where(eg => (statusId == -1 || eg.ExpenseGroupStatusId == statusId))
                     .Where(eg => (userId == null || eg.UserId == userId));
 
@@ -77,9 +96,11 @@ namespace ExpenseTracker.API.Controllers
                  var urlHelper = new UrlHelper(Request);
                  var prevLink = page > 1 ? urlHelper.Link("ExpenseGroupsList",
                      new { page = page - 1, pageSize = pageSize, sort = sort
+                         , fields = fields
                          , status = status, userId = userId }) : "";
                  var nextLink = page < totalPages ? urlHelper.Link("ExpenseGroupsList",
                      new { page = page + 1, pageSize = pageSize, sort = sort
+                         , fields = fields
                          , status = status, userId = userId }) : "";
 
 
@@ -102,7 +123,7 @@ namespace ExpenseTracker.API.Controllers
                      .Skip(pageSize * (page - 1))
                      .Take(pageSize)
                      .ToList()
-                     .Select(eg => _expenseGroupFactory.CreateExpenseGroup(eg)));
+                     .Select(eg => _expenseGroupFactory.CreateDataShapedObject(eg, lstOfFields)));
 
             }
             catch (Exception)

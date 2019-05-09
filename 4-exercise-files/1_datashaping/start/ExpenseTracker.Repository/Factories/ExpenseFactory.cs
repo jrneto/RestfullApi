@@ -43,6 +43,35 @@ namespace ExpenseTracker.Repository.Factories
                 Id = expense.Id
             };
         }
+
+        public Object CreateDataShapedObject(Expense expense, List<string> lstOfFields)
+        {
+            return CreateDataShapedObject(CreateExpense(expense), lstOfFields);
+        }
+
+        public Object CreateDataShapedObject(DTO.Expense expense, List<string> lstOfFields)
+        {
+            if (!lstOfFields.Any())
+            {
+                return expense;
+            }
+            else
+            {
+                ExpandoObject objectToReturn = new ExpandoObject();
+                foreach (var field in lstOfFields)
+                {
+                    var fieldValue = expense.GetType()
+                        .GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)
+                        .GetValue(expense, null);
+
+                    ((IDictionary<string, Object>)objectToReturn).Add(field, fieldValue);
+                }
+
+                return objectToReturn;
+            }
+
+            
+        }
          
     }
 }
