@@ -121,7 +121,7 @@ namespace ExpenseTracker.API.Controllers
 
                  // return result
                  return Ok(expenseGroups                    
-                     .Skip(pageSize * (page - 1))
+                     .Skip(pageSize * (page - 1) )
                      .Take(pageSize)
                      .ToList()
                      .Select(eg => _expenseGroupFactory.CreateDataShapedObject(eg, lstOfFields)));

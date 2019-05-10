@@ -1,4 +1,5 @@
-﻿@model IList<ExpenseTracker.DTO.ExpenseGroup>
+﻿@model ExpenseTracker.WebClient.Models.ExpenseGroupsViewModel
+@using PagedList.Mvc;
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -26,7 +27,7 @@
             <th></th>
         </tr>
 
-        @foreach (var item in Model) {
+        @foreach (var item in Model.ExpenseGroups) {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
@@ -35,7 +36,8 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ExpenseGroupStatusId)
+                    @((Model.ExpenseGroupsStatusses as List<ExpenseTracker.DTO.ExpenseGroupStatus>)
+                        .First(egs => egs.Id == item.ExpenseGroupStatusId).Description)
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
@@ -46,4 +48,8 @@
 }
 
     </table>
+
+@(Model.PagingInfo.CurrentPage) of @Model.PagingInfo.TotalPages
+
+@Html.PagedListPager(Model.ExpenseGroups, page => Url.Action("Index", new { page }))
  
