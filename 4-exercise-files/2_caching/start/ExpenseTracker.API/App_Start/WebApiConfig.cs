@@ -40,6 +40,8 @@ namespace ExpenseTracker.API
             json.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
             json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
+            config.MessageHandlers.Add(new CacheCow.Server.CachingHandler(config));
+
             return config;
              
         }
