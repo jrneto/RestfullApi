@@ -14,7 +14,8 @@ namespace ExpenseTracker.WebClient.Helpers
     /// </summary>
     public static class HttpClientExtensions
     {
-        public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, string requestUri, HttpContent content)
+        public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, string requestUri, 
+            HttpContent content)
         {
             var method = new HttpMethod("PATCH");
 
@@ -26,7 +27,8 @@ namespace ExpenseTracker.WebClient.Helpers
             return client.SendAsync(request);
         }
 
-        public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, Uri requestUri, HttpContent content)
+        public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, Uri requestUri, 
+            HttpContent content)
         {
             var method = new HttpMethod("PATCH");
 
@@ -38,7 +40,8 @@ namespace ExpenseTracker.WebClient.Helpers
             return client.SendAsync(request);
         }
 
-        public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, string requestUri, HttpContent content, CancellationToken cancellationToken)
+        public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, string requestUri,
+            HttpContent content, CancellationToken cancellationToken)
         {
             var method = new HttpMethod("PATCH");
 
@@ -50,7 +53,8 @@ namespace ExpenseTracker.WebClient.Helpers
             return client.SendAsync(request, cancellationToken);
         }
 
-        public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, Uri requestUri, HttpContent content, CancellationToken cancellationToken)
+        public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, Uri requestUri,
+            HttpContent content, CancellationToken cancellationToken)
         {
             var method = new HttpMethod("PATCH");
 
